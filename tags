@@ -1,0 +1,78 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ARCHIVE	Makefile	/^ARCHIVE=\/bin\/tar cf -$/;"	m
+BINDIR	Makefile	/^BINDIR=$(PREFIX)\/bin$/;"	m
+BIO	gen.h	23;"	d
+CC	Makefile	/^	CC=gcc cov-build --dir cov-int make all$/;"	m
+CC	Makefile	/^CC=arm-linux-gcc$/;"	m
+COMPRESS	Makefile	/^COMPRESS=\/bin\/gzip -9$/;"	m
+DEBUG	Makefile	/^DEBUG=yes$/;"	m
+DOCDIR	Makefile	/^DOCDIR=$(PREFIX)\/share\/doc\/$(TARGET)$/;"	m
+DOCS	Makefile	/^DOCS=license.txt license.OpenSSL readme.txt$/;"	m
+ERROR_BUFFER_SIZE	gen.h	26;"	d
+INSTALL	Makefile	/^INSTALL=install$/;"	m
+INSTALLBIN	Makefile	/^INSTALLBIN=$(INSTALL) -m 0755$/;"	m
+INSTALLDIR	Makefile	/^INSTALLDIR=$(INSTALL) -m 0755 -d$/;"	m
+INSTALLDOC	Makefile	/^INSTALLDOC=$(INSTALL) -m 0644$/;"	m
+INSTALLMAN	Makefile	/^INSTALLMAN=$(INSTALL) -m 0644$/;"	m
+MANDIR	Makefile	/^MANDIR=$(PREFIX)\/share\/man$/;"	m
+MANS	Makefile	/^MANS=httping.1$/;"	m
+MKDIR	Makefile	/^MKDIR=\/bin\/mkdir$/;"	m
+OBJS	Makefile	/^OBJS=mem.o http.o io.o str.o error.o utils.o main.o tcp.o res.o$/;"	m
+OFLAGS	Makefile	/^OFLAGS=-O3$/;"	m
+PACKAGE	Makefile	/^PACKAGE=$(TARGET)-$(VERSION)$/;"	m
+PREFIX	Makefile	/^PREFIX=\/usr$/;"	m
+RC_OK	gen.h	16;"	d
+RC_SHORTREAD	gen.h	17;"	d
+RC_TIMEOUT	gen.h	18;"	d
+READ_SSL	mssl.c	/^int READ_SSL(SSL *ssl_h, char *whereto, int len)$/;"	f
+RMDIR	Makefile	/^RMDIR=\/bin\/rm -rf$/;"	m
+SSL	gen.h	21;"	d
+SSL_CTX	gen.h	22;"	d
+STRIP	Makefile	/^STRIP=\/usr\/bin\/strip$/;"	m
+TARGET	Makefile	/^TARGET=httping$/;"	m
+WFLAGS	Makefile	/^WFLAGS=-Wall -W$/;"	m
+WRITE_SSL	mssl.c	/^int WRITE_SSL(SSL *ssl_h, char *whereto, int len)$/;"	f
+alphabet	main.c	/^const char *alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+\/";$/;"	v
+bio_err	mssl.c	/^BIO *bio_err=0;$/;"	v
+close_ssl_connection	mssl.c	/^char close_ssl_connection(SSL *ssl_h, int socket_h)$/;"	f
+connect_ssl	mssl.c	/^int connect_ssl(int socket_h, SSL_CTX *client_ctx, SSL **ssl_h, BIO **s_bio, int timeout)$/;"	f
+connect_to	tcp.c	/^int connect_to(struct sockaddr *bind_to, struct addrinfo *ai, int timeout)$/;"	f
+emit_error	main.c	/^void emit_error()$/;"	f
+enc_b64	main.c	/^int enc_b64(char *source, size_t source_lenght, char *target)$/;"	f
+encode_tryptique	main.c	/^void encode_tryptique(char source[3], char result[4])$/;"	f
+error_exit	error.c	/^void error_exit(char *format, ...)$/;"	f
+error_exit	mem.c	/^static void error_exit(char *format, ...)$/;"	f	file:
+get_HTTP_headers	http.c	/^int get_HTTP_headers(int socket_h, SSL *ssl_h, char **headers, int *overflow, int timeout)$/;"	f
+get_addr	res.c	/^void get_addr(struct addrinfo *ai_use, struct sockaddr_in6 *addr)$/;"	f
+get_fingerprint	mssl.c	/^char * get_fingerprint(SSL *ssl_h)$/;"	f
+get_ts	utils.c	/^double get_ts(void)$/;"	f
+handler	main.c	/^void handler(int sig)$/;"	f
+incopy	res.h	16;"	d
+initialize_ctx	mssl.c	/^SSL_CTX * initialize_ctx(void)$/;"	f
+last_error	main.c	/^char last_error[ERROR_BUFFER_SIZE];$/;"	v
+machine_readable	main.c	/^char machine_readable = 0;$/;"	v
+main	main.c	/^int main(int argc, char *argv[])$/;"	f
+max	utils.h	19;"	d
+min	utils.h	18;"	d
+myfree	mem.c	/^void myfree(void *p)$/;"	f
+mymalloc	mem.c	/^void * mymalloc(int size, char *what)$/;"	f
+myread	io.c	/^ssize_t myread(int fd, char *whereto, size_t len, int timeout)$/;"	f
+myrealloc	mem.c	/^void * myrealloc(void *oldp, int new_size, char *what)$/;"	f
+mystrdup	mem.c	/^char * mystrdup(char *in, char *what)$/;"	f
+mywrite	io.c	/^ssize_t mywrite(int fd, char *wherefrom, size_t len, int timeout)$/;"	f
+nagios_mode	main.c	/^char nagios_mode = 0;$/;"	v
+quiet	main.c	/^int quiet = 0;$/;"	v
+read_to	io.c	/^ssize_t read_to(int fd, char *whereto, size_t len, int timeout)$/;"	f
+resolve_host	res.c	/^int resolve_host(char *host, struct addrinfo **ai, char use_ipv6, int portnr)$/;"	f
+select_resolved_host	res.c	/^struct addrinfo * select_resolved_host(struct addrinfo *ai, char use_ipv6)$/;"	f
+set_fd_blocking	io.c	/^int set_fd_blocking(int fd)$/;"	f
+set_fd_nonblocking	io.c	/^int set_fd_nonblocking(int fd)$/;"	f
+set_tcp_low_latency	tcp.c	/^int set_tcp_low_latency(int sock)$/;"	f
+stop	main.c	/^static volatile int stop = 0;$/;"	v	file:
+usage	main.c	/^void usage(void)$/;"	f
+version	main.c	/^void version(void)$/;"	f
