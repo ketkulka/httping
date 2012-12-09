@@ -51,6 +51,10 @@ OBJS+=mssl.o
 LDFLAGS+=-lssl -lcrypto
 endif
 
+ifeq ($(TFO),yes)
+CFLAGS+=-DTCP_TFO
+endif
+
 ifeq ($(DEBUG),yes)
 CFLAGS+=-D_DEBUG -ggdb
 LDFLAGS+=-g
