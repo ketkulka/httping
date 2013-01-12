@@ -44,6 +44,9 @@ MANS=httping.1
 
 DOCS=license.txt license.OpenSSL readme.txt
 
+# support for tcp fast open?
+# TFO=yes
+
 ifeq ($(SSL),no)
 CFLAGS+=-DNO_SSL
 else
@@ -78,7 +81,7 @@ install: $(TARGET)
 	$(INSTALLMAN) $(MANS) $(DESTDIR)/$(MANDIR)/man1
 	$(INSTALLDIR) $(DESTDIR)/$(DOCDIR)
 	$(INSTALLDOC) $(DOCS) $(DESTDIR)/$(DOCDIR)
-ifneq (DEBUG,yes)
+ifneq ($(DEBUG),yes)
 	$(STRIP) $(DESTDIR)/$(BINDIR)/$(TARGET)
 endif
 

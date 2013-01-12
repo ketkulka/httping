@@ -31,7 +31,7 @@
 
 extern char last_error[];
 
-int connect_to(struct sockaddr *bind_to, struct addrinfo *ai, int timeout, int tfo, char *msg, int msg_len, int *msg_accepted)
+int connect_to(struct sockaddr *bind_to, struct addrinfo *ai, int timeout, char *tfo, char *msg, int msg_len, int *msg_accepted)
 {
 	int     fd;
 	int 	rc;
@@ -82,7 +82,7 @@ int connect_to(struct sockaddr *bind_to, struct addrinfo *ai, int timeout, int t
 
 	/* connect to peer */
 #ifdef TCP_TFO
-	if (tfo)
+	if (*tfo)
 	{
 		rc = sendto(fd, msg, msg_len, MSG_FASTOPEN, ai -> ai_addr, ai -> ai_addrlen);
 		
@@ -91,13 +91,16 @@ int connect_to(struct sockaddr *bind_to, struct addrinfo *ai, int timeout, int t
 		if(errno == 0)
 			return fd;
 		if(errno == ENOTSUP)
-			printf("TCP TFO Not Supported. Hint: \"/proc/sys/net/ipv4/tcp_fastopen\" Disabling TFO\n");
+		{
+			printf("TCP TFO Not Supported. Please check if \"/proc/sys/net/ipv4/tcp_fastopen\" is 1. Disabling TFO for now.\n");
+			*tfo = 0;
+		}
 	}
 			
 	else
 #endif
 	{
-		if ((connect(fd, ai -> ai_addr, ai -> ai_addrlen) == 0))
+		if (connect(fd, ai -> ai_addr, ai -> ai_addrlen) == 0)
 		{
 			/* connection made, return */
 			return fd;
@@ -108,14 +111,15 @@ int connect_to(struct sockaddr *bind_to, struct addrinfo *ai, int timeout, int t
 	rc = select(fd + 1, NULL, &wfds, NULL, &to);
 	if (rc == 0)
 	{
+		snprintf(last_error, ERROR_BUFFER_SIZE, "connect time out\n");
 		close (fd);
-		return -2;	/* timeout */
+		return RC_TIMEOUT;	/* timeout */
 	}
 	else if (rc == -1)
 	{
 		close(fd);
 		if (errno == EINTR)
-			return -3;	/* ^C pressed */
+			return RC_CTRLC;/* ^C pressed */
 		else
 			return -1;	/* error */
 	}

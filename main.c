@@ -52,10 +52,54 @@ char last_error[ERROR_BUFFER_SIZE];
 
 void version(void)
 {
-	fprintf(stderr, "HTTPing v" VERSION ", (C) 2003-2012 folkert@vanheusden.com\n");
+	fprintf(stderr, "HTTPing v" VERSION ", (C) 2003-2013 folkert@vanheusden.com\n");
 #ifndef NO_SSL
 	fprintf(stderr, "SSL support included\n");
 #endif
+}
+
+void help_long(void)
+{
+	fprintf(stderr, "--url			-g\n");
+	fprintf(stderr, "--hostname		-h\n");
+	fprintf(stderr, "--port			-p\n");
+	fprintf(stderr, "--host-port		-x\n");
+	fprintf(stderr, "--count		-c\n");
+	fprintf(stderr, "--interval		-i\n");
+	fprintf(stderr, "--timeout		-t\n");
+	fprintf(stderr, "--ipv6		-	6\n");
+	fprintf(stderr, "--show-statusodes	-s\n");
+	fprintf(stderr, "--split-time		-S\n");
+	fprintf(stderr, "--get-request		-G\n");
+	fprintf(stderr, "--show-transfer-speed	-b\n");
+	fprintf(stderr, "--show-xfer-speed-compressed		-B\n");
+	fprintf(stderr, "--data-limit		-L\n");
+	fprintf(stderr, "--show-kb		-X\n");
+#ifndef NO_SSL
+	fprintf(stderr, "--use-ssl		-l\n");
+	fprintf(stderr, "--show-fingerprint	-z\n");
+#endif
+	fprintf(stderr, "--flood		-f\n");
+	fprintf(stderr, "--audible-ping		-a\n");
+	fprintf(stderr, "--parseable-output	-m\n");
+	fprintf(stderr, "--ok-result-codes	-o\n");
+	fprintf(stderr, "--result-string	-e\n");
+	fprintf(stderr, "--user-agent		-I\n");
+	fprintf(stderr, "--referer		-S\n");
+	fprintf(stderr, "--resolve-once		-r\n");
+	fprintf(stderr, "--nagios-mode-1	-n\n");
+	fprintf(stderr, "--nagios-mode-2	-n\n");
+	fprintf(stderr, "--bind-to		-y\n");
+	fprintf(stderr, "--quiet		-q\n");
+	fprintf(stderr, "--basic-auth		-A\n");
+	fprintf(stderr, "--username		-U\n");
+	fprintf(stderr, "--password		-P\n");
+	fprintf(stderr, "--cookie		-C\n");
+	fprintf(stderr, "--persistent-connections	-Q\n");
+	fprintf(stderr, "--no-cache		-Z\n");
+	fprintf(stderr, "--tcp-fast-open        -F\n");
+	fprintf(stderr, "--version		-V\n");
+	fprintf(stderr, "--help			-H\n");
 }
 
 void usage(void)
@@ -110,54 +154,14 @@ void usage(void)
 	fprintf(stderr, "-C cookie=value Add a cookie to the request\n");
 	fprintf(stderr, "-V             show the version\n\n");
 	fprintf(stderr, "\n");
-	fprintf(stderr, "--url			-g\n");
-	fprintf(stderr, "--hostname		-h\n");
-	fprintf(stderr, "--port			-p\n");
-	fprintf(stderr, "--host-port		-x\n");
-	fprintf(stderr, "--count		-c\n");
-	fprintf(stderr, "--interval		-i\n");
-	fprintf(stderr, "--timeout		-t\n");
-	fprintf(stderr, "--ipv6		-	6\n");
-	fprintf(stderr, "--show-statusodes	-s\n");
-	fprintf(stderr, "--split-time		-S\n");
-	fprintf(stderr, "--get-request		-G\n");
-	fprintf(stderr, "--show-transfer-speed	-b\n");
-	fprintf(stderr, "--show-xfer-speed-compressed		-B\n");
-	fprintf(stderr, "--data-limit		-L\n");
-	fprintf(stderr, "--show-kb		-X\n");
-#ifndef NO_SSL
-	fprintf(stderr, "--use-ssl		-l\n");
-	fprintf(stderr, "--show-fingerprint	-z\n");
-#endif
-	fprintf(stderr, "--flood		-f\n");
-	fprintf(stderr, "--audible-ping		-a\n");
-	fprintf(stderr, "--parseable-output	-m\n");
-	fprintf(stderr, "--ok-result-codes	-o\n");
-	fprintf(stderr, "--result-string	-e\n");
-	fprintf(stderr, "--user-agent		-I\n");
-	fprintf(stderr, "--referer		-S\n");
-	fprintf(stderr, "--resolve-once		-r\n");
-	fprintf(stderr, "--nagios-mode-1	-n\n");
-	fprintf(stderr, "--nagios-mode-2	-n\n");
-	fprintf(stderr, "--bind-to		-y\n");
-	fprintf(stderr, "--quiet		-q\n");
-	fprintf(stderr, "--basic-auth		-A\n");
-	fprintf(stderr, "--username		-U\n");
-	fprintf(stderr, "--password		-P\n");
-	fprintf(stderr, "--cookie		-C\n");
-	fprintf(stderr, "--persistent-connections	-Q\n");
-	fprintf(stderr, "--no-cache		-Z\n");
-	fprintf(stderr, "--tcp-fast-open        -F\n");
-	fprintf(stderr, "--version		-V\n");
-	fprintf(stderr, "--help			-h\n");
+	fprintf(stderr, "-J             list long options\n");
+	fprintf(stderr, "\n");
 }
 
 void emit_error()
 {
 	if (!quiet && !machine_readable && !nagios_mode)
-	{
 		printf("%s", last_error);
-	}
 
 	if (!nagios_mode)
 		last_error[0] = 0x00;
@@ -267,7 +271,7 @@ int main(int argc, char *argv[])
 	char persistent_connections = 0, persistent_did_reconnect = 0;
 	char no_cache = 0;
 	char *getcopyorg = NULL;
-	int tfo = 0;
+	char tfo = 0;
 
 	static struct option long_options[] =
 	{
@@ -309,7 +313,7 @@ int main(int argc, char *argv[])
 		{"password",	1, NULL, 'P' },
 		{"cookie",	1, NULL, 'C' },
 		{"version",	0, NULL, 'V' },
-		{"help",	0, NULL, 'h' },
+		{"help",	0, NULL, 'H' },
 		{NULL,		0, NULL, 0   }
 	};
 
@@ -320,10 +324,14 @@ int main(int argc, char *argv[])
 
 	buffer = (char *)mymalloc(page_size, "receive buffer");
 
-	while((c = getopt_long(argc, argv, "ZQ6Sy:XL:bBg:h:p:c:i:Gx:t:o:e:falqsmV?I:R:rn:N:z:AP:U:C:F", long_options, NULL)) != -1)
+	while((c = getopt_long(argc, argv, "JZQ6Sy:XL:bBg:h:p:c:i:Gx:t:o:e:falqsmV?I:R:rn:N:z:AP:U:C:F", long_options, NULL)) != -1)
 	{
 		switch(c)
 		{
+			case 'J':
+				help_long();
+				return 0;
+
 			case 'Z':
 				no_cache = 1;
 				break;
@@ -506,13 +514,20 @@ int main(int argc, char *argv[])
 			case 'C':
 				cookie = optarg;
 				break;
+
 			case 'F':
 #ifdef TCP_TFO
 				tfo = 1;
 #else
-				printf("Warning: No TCP TFO Supported.. Disabling..\n");
+				printf("Warning: TCP TFO is not supported. Disabling.\n");
 #endif
 				break;
+ 
+			case 'H':
+				version();
+				usage();
+				return 0;
+
 			case '?':
 			default:
 				version();
@@ -768,11 +783,9 @@ persistent_loop:
 			
 			if ((persistent_connections && fd < 0) || (!persistent_connections))
 			{
-				fd = connect_to((struct sockaddr *)(bind_to_valid?bind_to:NULL), ai, timeout, tfo, request, req_len, &req_sent);
+				fd = connect_to((struct sockaddr *)(bind_to_valid?bind_to:NULL), ai, timeout, &tfo, request, req_len, &req_sent);
 			}
-		
-
-			if (fd == -3)	/* ^C pressed */
+			if (fd == RC_CTRLC)	/* ^C pressed */
 				break;
 
 			if (fd < 0)
@@ -809,26 +822,23 @@ persistent_loop:
 						close(fd);
 						fd = rc;
 
-						if (persistent_connections)
+						if (persistent_connections && ++persistent_tries < 2)
 						{
-							if (++persistent_tries < 2)
-							{
-								close(fd);
-								fd = -1;
-								persistent_did_reconnect = 1;
-								goto persistent_loop;
-							}
+							persistent_did_reconnect = 1;
+
+							goto persistent_loop;
 						}
 					}
 				}
 #endif
 			}
+
 			if (split)
 				dafter_connect = get_ts();
 
 			if (fd < 0)
 			{
-				if (fd == -2)
+				if (fd == RC_TIMEOUT)
 					snprintf(last_error, ERROR_BUFFER_SIZE, "timeout connecting to host\n");
 
 				emit_error();
@@ -866,9 +876,9 @@ persistent_loop:
 
 				if (rc == -1)
 					snprintf(last_error, ERROR_BUFFER_SIZE, "error sending request to host\n");
-				else if (rc == -2)
+				else if (rc == RC_TIMEOUT)
 					snprintf(last_error, ERROR_BUFFER_SIZE, "timeout sending to host\n");
-				else if (rc == -3)
+				else if (rc == RC_CTRLC)
 				{/* ^C */}
 				else if (rc == 0)
 					snprintf(last_error, ERROR_BUFFER_SIZE, "connection prematurely closed by peer\n");
@@ -914,17 +924,15 @@ persistent_loop:
 				{
 					char *dummy = strchr(encoding + 1, '\n');
 					if (dummy) *dummy = 0x00;
-					dummy = strchr(sc, '\r');
+					dummy = strchr(encoding + 1, '\r');
 					if (dummy) *dummy = 0x00;
 
 					if (strstr(encoding, "gzip") == 0 || strstr(encoding, "deflate") == 0)
-					{
 						is_compressed = 1;
-					}
 				}
 			}
 
-			if (persistent_connections && show_bytes_xfer)
+			if (persistent_connections && show_bytes_xfer && reply != NULL)
 			{
 				char *length = strstr(reply, "\nContent-Length:");
 				if (!length)
@@ -935,12 +943,16 @@ persistent_loop:
 					fd = -1;
 					break;
 				}
+
 				len = atoi(&length[17]);
 			}
 
-			headers_len = (strstr(reply, "\r\n\r\n") - reply) + 4;
-
-			free(reply);
+			headers_len = 0;
+			if (reply)
+			{
+				headers_len = strlen(reply) + 4;
+				free(reply);
+			}
 
 			if (rc < 0)
 			{
@@ -1065,8 +1077,10 @@ persistent_loop:
 				{
 					printf("%s", err_str);
 				}
+
 				if(audible)
 					putchar('\a');
+
 				printf("\n");
 			}
 			else if (!quiet && !nagios_mode)
@@ -1112,8 +1126,10 @@ persistent_loop:
 					printf(" %s", fp);
 					free(fp);
 				}
+
 				if(audible)
 					putchar('\a');
+
 				printf("\n");
 			}
 
